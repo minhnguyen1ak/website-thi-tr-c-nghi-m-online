@@ -1,22 +1,26 @@
 import { useEffect, useState } from "react";
-import './css/form.css';
+import "./css/form.css";
 
 // Import các component
-import Login from './components/Login';
-import Register from './components/Register';
-import Home from './components/Home';
-import CreateRoom from './components/CreateRoom';
-import CreateExam from './components/CreateExam';
-import CreateQuestion from './components/CreateQuestion';
-import TakeExamForm from './components/TakeExamForm';
-import ExamRoom from './components/ExamRoom';
-import ExamForm from './components/ExamForm';
-import ViewExam from './components/ViewExam';
-import EditExam from './components/EditExam';
+import Login from "./components/Login";
+import Register from "./components/Register";
+import Home from "./components/Home";
+import CreateRoom from "./components/CreateRoom";
+import CreateExam from "./components/CreateExam";
+import CreateQuestion from "./components/CreateQuestion";
+import TakeExamForm from "./components/TakeExamForm";
+import ExamRoom from "./components/ExamRoom";
+import ExamForm from "./components/ExamForm";
+import ViewExam from "./components/ViewExam";
+import EditExam from "./components/EditExam";
+import RoomToView from "./components/RoomToView";
 
 const App = () => {
-  const [authPage, setAuthPage] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem("currentUser"));
+  const [roomToView, setRoomToView] = useState(null);
+  const [authPage, setAuthPage] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    () => !!localStorage.getItem("currentUser")
+  );
 
   const [isCreatingRoom, setIsCreatingRoom] = useState(false);
   const [isCreatingExam, setIsCreatingExam] = useState(false);
@@ -24,9 +28,15 @@ const App = () => {
   const [isTakingExam, setIsTakingExam] = useState(false);
   const [isViewingResults, setIsViewingResults] = useState(false);
 
-  const [exams, setExams] = useState(() => JSON.parse(localStorage.getItem("exams")) || []);
-  const [rooms, setRooms] = useState(() => JSON.parse(localStorage.getItem("rooms")) || []);
-  const [results, setResults] = useState(() => JSON.parse(localStorage.getItem("results")) || []);
+  const [exams, setExams] = useState(
+    () => JSON.parse(localStorage.getItem("exams")) || []
+  );
+  const [rooms, setRooms] = useState(
+    () => JSON.parse(localStorage.getItem("rooms")) || []
+  );
+  const [results, setResults] = useState(
+    () => JSON.parse(localStorage.getItem("results")) || []
+  );
 
   const [examData, setExamData] = useState(null);
   const [currentExam, setCurrentExam] = useState(null);
@@ -65,12 +75,14 @@ const App = () => {
     setSelectedResult(null);
     setExamToView(null);
     setExamToEdit(null);
+    setRoomToView(null);
+    
   };
 
   const handleLoginSuccess = (user) => {
     localStorage.setItem("currentUser", JSON.stringify(user));
     setIsLoggedIn(true);
-    setAuthPage('');
+    setAuthPage("");
   };
 
   const handleLogout = () => {
@@ -112,10 +124,13 @@ const App = () => {
       totalQuestions,
       totalMarks,
       questions,
-      isShared: true
+      isShared: true,
     };
 
-    const updatedExams = [...exams.filter(e => e.examCode !== newExam.examCode), newExam];
+    const updatedExams = [
+      ...exams.filter((e) => e.examCode !== newExam.examCode),
+      newExam,
+    ];
     setExams(updatedExams);
     alert("Đề thi đã được lưu!");
     resetAllModes();
@@ -124,18 +139,23 @@ const App = () => {
   const handleSaveRoom = (roomData) => {
     const updatedRooms = [...rooms, roomData];
     setRooms(updatedRooms);
-    alert('Phòng thi đã được lưu!');
+    alert("Phòng thi đã được lưu!");
     resetAllModes();
   };
 
   const handleJoinRoom = (info, roomCode) => {
     const trimmedCode = roomCode.trim().toLowerCase();
-    const room = rooms.find(r => r.roomCode?.trim().toLowerCase() === trimmedCode);
+    const room = rooms.find(
+      (r) => r.roomCode?.trim().toLowerCase() === trimmedCode
+    );
 
     if (!room) return alert("Không tìm thấy phòng thi!");
     if (!room.examCode) return alert("Phòng thi chưa có đề thi!");
 
-    const exam = exams.find(e => e.examCode?.trim().toLowerCase() === room.examCode.trim().toLowerCase());
+    const exam = exams.find(
+      (e) =>
+        e.examCode?.trim().toLowerCase() === room.examCode.trim().toLowerCase()
+    );
 
     if (!exam) return alert("Không tìm thấy đề thi cho phòng này!");
 
@@ -147,35 +167,38 @@ const App = () => {
   };
 
   const handleSaveResults = (userAnswers) => {
-    if (!Array.isArray(userAnswers)) return console.error("userAnswers is not an array");
+    if (!Array.isArray(userAnswers))
+      return console.error("userAnswers is not an array");
 
-    const correctCount = userAnswers.filter(ans => ans.selectedAnswer === ans.correctAnswer).length;
+    const correctCount = userAnswers.filter(
+      (ans) => ans.selectedAnswer === ans.correctAnswer
+    ).length;
     const totalQuestions = userAnswers.length;
     const scorePerQuestion = parseInt(selectedExam?.scorePerQuestion || 1);
     const totalScore = correctCount * scorePerQuestion;
 
     const resultData = {
-      examCode: selectedExam?.examCode || 'N/A',
-      examName: selectedExam?.examName || 'Không rõ',
+      examCode: selectedExam?.examCode || "N/A",
+      examName: selectedExam?.examName || "Không rõ",
       score: totalScore,
       totalQuestions,
       correctCount,
       studentInfo,
       submissionTime: new Date().toLocaleString(),
-      answers: userAnswers
+      answers: userAnswers,
     };
 
-    setResults(prev => [...prev, resultData]);
+    setResults((prev) => [...prev, resultData]);
     alert("Nộp bài thành công! Số điểm: " + totalScore);
     resetAllModes();
   };
 
   const handleDeleteExam = (examCode) => {
-    setExams(prev => prev.filter(exam => exam.examCode !== examCode));
+    setExams((prev) => prev.filter((exam) => exam.examCode !== examCode));
   };
 
   const handleDeleteRoom = (roomCode) => {
-    setRooms(prev => prev.filter(room => room.roomCode !== roomCode));
+    setRooms((prev) => prev.filter((room) => room.roomCode !== roomCode));
   };
 
   return (
@@ -183,16 +206,22 @@ const App = () => {
       <Home
         isLoggedIn={isLoggedIn}
         onLogout={handleLogout}
-        onSwitchToLogin={() => setAuthPage('login')}
-        onSwitchToRegister={() => setAuthPage('register')}
+        onSwitchToLogin={() => setAuthPage("login")}
+        onSwitchToRegister={() => setAuthPage("register")}
         onCreateRoom={handleCreateRoom}
         onCreateExam={handleCreateExam}
         onStartExam={() => setIsTakingExam(true)}
         onGoHome={resetAllModes}
-        exams={exams.filter(exam => exam.isShared)}
+        exams={exams.filter((exam) => exam.isShared)}
         showExamList={
-          !isCreatingRoom && !isCreatingExam && !isCreatingQuestion &&
-          !isTakingExam && !authPage && !isViewingResults && !examToView && !examToEdit
+          !isCreatingRoom &&
+          !isCreatingExam &&
+          !isCreatingQuestion &&
+          !isTakingExam &&
+          !authPage &&
+          !isViewingResults &&
+          !examToView &&
+          !examToEdit
         }
         onStartExamFromCard={handleJoinRoom}
         results={results}
@@ -202,15 +231,15 @@ const App = () => {
         }}
       />
 
-      {!isLoggedIn && authPage === 'login' && (
+      {!isLoggedIn && authPage === "login" && (
         <Login
-          onSwitchToRegister={() => setAuthPage('register')}
+          onSwitchToRegister={() => setAuthPage("register")}
           onLoginSuccess={handleLoginSuccess}
         />
       )}
 
-      {!isLoggedIn && authPage === 'register' && (
-        <Register onSwitchToLogin={() => setAuthPage('login')} />
+      {!isLoggedIn && authPage === "register" && (
+        <Register onSwitchToLogin={() => setAuthPage("login")} />
       )}
 
       {isLoggedIn && isCreatingRoom && !isTakingExam && !isViewingResults && (
@@ -221,7 +250,7 @@ const App = () => {
         />
       )}
 
-      {isLoggedIn && isCreatingExam && !isCreatingRoom && !isTakingExam && !isViewingResults && (
+      {isLoggedIn && isCreatingExam && (
         <CreateExam
           examData={examData}
           onBack={() => setIsCreatingExam(false)}
@@ -229,7 +258,7 @@ const App = () => {
         />
       )}
 
-      {isLoggedIn && isCreatingQuestion && !isCreatingRoom && !isCreatingExam && !isTakingExam && !isViewingResults && (
+      {isLoggedIn && isCreatingQuestion && (
         <CreateQuestion
           examData={examData}
           onBack={() => {
@@ -248,20 +277,24 @@ const App = () => {
         />
       )}
 
-      {isLoggedIn && isTakingExam && studentInfo && selectedExam && selectedRoom && (
-        <ExamForm
-          examData={selectedExam}
-          roomData={selectedRoom}
-          studentInfo={studentInfo}
-          onSubmit={handleSaveResults}
-          onExit={() => {
-            setIsTakingExam(false);
-            resetAllModes();
-          }}
-        />
-      )}
+      {isLoggedIn &&
+        isTakingExam &&
+        studentInfo &&
+        selectedExam &&
+        selectedRoom && (
+          <ExamForm
+            examData={selectedExam}
+            roomData={selectedRoom}
+            studentInfo={studentInfo}
+            onSubmit={handleSaveResults}
+            onExit={() => {
+              setIsTakingExam(false);
+              resetAllModes();
+            }}
+          />
+        )}
 
-      {isLoggedIn && isViewingResults && !isTakingExam && (
+      {isLoggedIn && isViewingResults && (
         <div className="form-container">
           <h2>📊 Kết quả thi đã làm</h2>
           <table className="results-table">
@@ -278,19 +311,38 @@ const App = () => {
                   <td>{result.score}</td>
                   <td>{result.submissionTime}</td>
                   <td>
-                    <button onClick={() => setSelectedResult(result)}>Xem</button>
+                    <button onClick={() => setSelectedResult(result)}>
+                      Xem
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
           {selectedResult && (
-            <div className="result-detail" style={{ marginTop: "1rem", background: "#f5f5f5", padding: "1rem", borderRadius: "10px" }}>
+            <div
+              className="result-detail"
+              style={{
+                marginTop: "1rem",
+                background: "#f5f5f5",
+                padding: "1rem",
+                borderRadius: "10px",
+              }}
+            >
               <h3>📄 Chi tiết kết quả: {selectedResult.examName}</h3>
-              <p><strong>Họ tên:</strong> {selectedResult.studentInfo?.fullName}</p>
-              <p><strong>Lớp:</strong> {selectedResult.studentInfo?.className || 'Không rõ'}</p>
-              <p><strong>Số điểm:</strong> {selectedResult.score}</p>
-              <p><strong>Thời gian nộp:</strong> {selectedResult.submissionTime}</p>
+              <p>
+                <strong>Họ tên:</strong> {selectedResult.studentInfo?.fullName}
+              </p>
+              <p>
+                <strong>Lớp:</strong>{" "}
+                {selectedResult.studentInfo?.className || "Không rõ"}
+              </p>
+              <p>
+                <strong>Số điểm:</strong> {selectedResult.score}
+              </p>
+              <p>
+                <strong>Thời gian nộp:</strong> {selectedResult.submissionTime}
+              </p>
               <button onClick={() => setSelectedResult(null)}>Đóng</button>
             </div>
           )}
@@ -300,72 +352,112 @@ const App = () => {
       {examToView && (
         <ViewExam exam={examToView} onClose={() => setExamToView(null)} />
       )}
+      {roomToView && (
+        <RoomToView room={roomToView} onClose={()=> setRoomToView(null)}/>
+      )}
 
       {examToEdit && (
-        <EditExam exam={examToEdit} onSave={handleSaveExam} onCancel={() => setExamToEdit(null)} />
+        <EditExam
+          exam={examToEdit}
+          onSave={handleSaveExam}
+          onCancel={() => setExamToEdit(null)}
+        />
       )}
-
-      {isLoggedIn && !isCreatingRoom && !isCreatingExam && !isCreatingQuestion && !studentInfo && !isTakingExam && !isViewingResults && !examToView && !examToEdit && (
-        <div className="form-container">
-          {exams.length > 0 && (
-            <>
-              <h2>📘 Danh Sách Đề Thi Đã Lưu</h2>
-              <table className="exam-table">
-                <thead>
-                  <tr>
-                    <th>Mã Đề</th>
-                    <th>Tên Đề Thi</th>
-                    <th>Hành Động</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {exams.filter(exam => exam.isShared).map((exam, index) => (
-                    <tr key={index}>
-                      <td>{exam.examCode}</td>
-                      <td>{exam.examName}</td>
-                      <td>
-                        <button onClick={() => setExamToView(exam)}>Xem</button>
-                        <button onClick={() => setExamToEdit(exam)}>Sửa</button>
-                        <button onClick={() => handleDeleteExam(exam.examCode)}>Xóa</button>
-                      </td>
+      
+      {isLoggedIn &&
+        !isCreatingRoom &&
+        !isCreatingExam &&
+        !isCreatingQuestion &&
+        !studentInfo &&
+        !isTakingExam &&
+        !isViewingResults &&
+        !examToView &&
+        !examToEdit && (
+          <div className="form-container">
+            {exams.length > 0 && (
+              <>
+                <h2>📘 Danh Sách Đề Thi Đã Lưu</h2>
+                <table className="exam-table">
+                  <thead>
+                    <tr>
+                      <th>Mã Đề</th>
+                      <th>Tên Đề Thi</th>
+                      <th>Hành Động</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </>
-          )}
+                  </thead>
+                  <tbody>
+                    {exams.map((exam, index) => (
+                      <tr key={index}>
+                        <td>{exam.examCode}</td>
+                        <td>{exam.examName}</td>
+                        <td>
+                          <button onClick={() => setExamToView(exam)}>
+                            Xem
+                          </button>
+                          <button onClick={() => setExamToEdit(exam)}>
+                            Sửa
+                          </button>
+                          <button
+                            onClick={() => handleDeleteExam(exam.examCode)}
+                          >
+                            Xóa
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </>
+            )}
 
-          {rooms.length > 0 && (
-            <>
-              <h2>🏫 Danh Sách Phòng Thi Đã Tạo</h2>
-              <table className="room-table">
-                <thead>
-                  <tr>
-                    <th>Mã Phòng</th>
-                    <th>Tên Phòng Thi</th>
-                    <th>Mã Đề Thi</th>
-                    <th>Hành Động</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {rooms.map((room, index) => (
-                    <tr key={index}>
-                      <td>{room.roomCode}</td>
-                      <td>{room.roomName}</td>
-                      <td>{room.examCode}</td>
-                      <td>
-                        <button onClick={() => alert('Xem phòng thi: ' + room.roomCode)}>Xem</button>
-                        <button onClick={() => alert('Sửa phòng thi: ' + room.roomCode)}>Sửa</button>
-                        <button onClick={() => handleDeleteRoom(room.roomCode)}>Xóa</button>
-                      </td>
+            {rooms.length > 0 && (
+              <>
+                <h2>🏫 Danh Sách Phòng Thi Đã Tạo</h2>
+                <table className="room-table">
+                  <thead>
+                    <tr>
+                      <th>Mã Phòng</th>
+                      <th>Tên Phòng</th>
+                      <th>Mã Đề Thi</th>
+                      <th>Hành Động</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </>
-          )}
-        </div>
-      )}
+                  </thead>
+                  <tbody>
+                    {rooms.map((room, index) => (
+                      <tr key={index}>
+                        <td>{room.roomCode}</td>
+                        <td>{room.roomName}</td>
+                        <td>{room.examCode}</td>
+                        <td>
+                          
+                          <button onClick={() => setRoomToView(room)}
+                            >
+                            Xem
+                            
+                          </button>
+                          
+
+                          <button
+                            onClick={() =>
+                              alert("Sửa phòng thi: " + room.roomCode)
+                            }
+                          >
+                            Sửa
+                          </button>
+                          <button
+                            onClick={() => handleDeleteRoom(room.roomCode)}
+                          >
+                            Xóa
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </>
+            )}
+          </div>
+        )}
     </div>
   );
 };
