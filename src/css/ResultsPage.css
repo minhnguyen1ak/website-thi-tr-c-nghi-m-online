@@ -1,0 +1,115 @@
+.result-page-container {
+    padding: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #fdfdfd;
+  }
+  
+  .result-page-container h2 {
+    font-size: 28px;
+    margin-bottom: 24px;
+    text-align: center;
+    color: #2c3e50;
+  }
+  
+  .result-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px; /* Khoảng cách giữa các hàng */
+    background-color: transparent;
+  }
+  
+  .result-table th,
+  .result-table td {
+    padding: 16px 20px;
+    text-align: left;
+    font-size: 16px;
+    background-color: #ffffff;
+    border-bottom: none;
+    color: #2f2f2f;
+  }
+  
+  .result-table thead th {
+    background-color: #ecf0f1;
+    color: #34495e;
+    font-weight: 600;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .result-table tbody tr {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+  }
+  
+  /* Zebra striping for better readability */
+  .result-table tbody tr:nth-child(even) td {
+    background-color: #f9f9f9;
+  }
+  
+  .result-table tbody tr:hover td {
+    background-color: #f0f8ff;
+  }
+  
+  .result-table button {
+    padding: 8px 14px;
+    border: none;
+    background-color: #27ae60;
+    color: white;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+  }
+  
+  .result-table button:hover {
+    background-color: #219150;
+  }
+  
+  /* Responsive mobile */
+  @media (max-width: 768px) {
+    .result-table thead {
+      display: none;
+    }
+  
+    .result-table, .result-table tbody, .result-table tr, .result-table td {
+      display: block;
+      width: 100%;
+    }
+  
+    .result-table tr {
+      margin-bottom: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+  
+    .result-table td {
+      padding: 12px 16px;
+      text-align: right;
+      position: relative;
+      font-size: 15px;
+      border: none;
+      border-bottom: 1px solid #f0f0f0;
+    }
+  
+    .result-table td:last-child {
+      border-bottom: none;
+    }
+  
+    .result-table td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 16px;
+      font-weight: 600;
+      text-transform: capitalize;
+      color: #555;
+      text-align: left;
+    }
+  
+    .result-table button {
+      width: 100%;
+      margin-top: 6px;
+    }
+  }
+  

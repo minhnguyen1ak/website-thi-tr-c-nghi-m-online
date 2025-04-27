@@ -1,0 +1,297 @@
+/* form.css */
+
+/* Container chung cho form */
+.form-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề */
+h2 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Form chung */
+.exam-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Khoảng cách giữa các phần tử trong form */
+}
+
+/* Mỗi nhóm trường thông tin */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Nhãn của các trường */
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+/* Trường nhập liệu */
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Đầu vào chỉ đọc */
+.readonly-input {
+    background-color: #eaeaea;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+    cursor: not-allowed;
+}
+
+/* Thông tin về kỳ thi */
+.exam-info {
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #333;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+}
+
+.exam-info p {
+    margin: 5px 0;
+}
+
+/* Phần đáp án của câu hỏi */
+.options label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.options input, .options select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Nhóm các nút */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* Nút Lưu */
+.save-button, .back-button {
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    min-width: 120px;
+}
+
+.save-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.save-button:hover {
+    background-color: #45a049;
+}
+
+.back-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.back-button:hover {
+    background-color: #e53935;
+}
+
+/* Cải thiện phần danh sách đề thi */
+.exam-list-container {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.exam-list-container h3 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.exam-item {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #fff;
+}
+
+.exam-item p {
+    margin: 5px 0;
+}
+
+.exam-item .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.exam-item .action-buttons button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.exam-item .action-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.exam-item .delete-button {
+    background-color: #dc3545;
+}
+
+.exam-item .delete-button:hover {
+    background-color: #c82333;
+}
+
+/* Bảng danh sách đề thi */
+.exam-table, .room-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  
+  .exam-table th, .room-table th,
+  .exam-table td, .room-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .exam-table th, .room-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .exam-table tr:nth-child(even), .room-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .exam-table tr:hover, .room-table tr:hover {
+    background-color: #e0e0e0;
+  }
+
+
+/* Media Query for Mobile Devices */
+@media (max-width: 768px) {
+
+    /* Form Container */
+    .form-container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    /* Tiêu đề */
+    h2 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    /* Form */
+    .exam-form {
+        gap: 8px;
+    }
+
+    /* Nhóm trường thông tin */
+    .form-group {
+        margin-bottom: 10px;
+    }
+
+    .form-group input,
+    .form-group select {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    /* Nút lưu và quay lại */
+    .button-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .save-button, .back-button {
+        font-size: 14px;
+        padding: 10px 20px;
+        min-width: 100%;
+    }
+
+    /* Danh sách đề thi */
+    .exam-list-container {
+        margin-top: 30px;
+        padding: 15px;
+    }
+
+    .exam-list-container h3 {
+        font-size: 18px;
+    }
+
+    .exam-item {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .exam-item .action-buttons {
+        flex-direction: column;
+    }
+
+    .exam-item .action-buttons button {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    /* Bảng danh sách đề thi */
+    .exam-table, .room-table {
+        font-size: 14px;
+    }
+
+    .exam-table th, .room-table th,
+    .exam-table td, .room-table td {
+        padding: 10px;
+    }
+
+    .exam-table tr:nth-child(even), .room-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .exam-table tr:hover, .room-table tr:hover {
+        background-color: #e0e0e0;
+    }
+}
+
+  
