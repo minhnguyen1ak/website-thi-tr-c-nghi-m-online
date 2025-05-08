@@ -19,7 +19,7 @@ const CreateExam = ({ examData, onBack, onNext }) => {
             const score = (Number(totalScore) / Number(questionCount)).toFixed(2);
             setForm(prev => ({ ...prev, scorePerQuestion: score }));
         }
-    }, [form]);
+    }, [form.questionCount, form.totalScore]); // Chỉ theo dõi 2 trường này
 
     const handleChange = e => {
         const { name, value } = e.target;
@@ -33,31 +33,33 @@ const CreateExam = ({ examData, onBack, onNext }) => {
     const handleSubmit = e => {
         e.preventDefault();
 
-        // Lấy danh sách đề thi đã lưu trong localStorage
         const storedExams = JSON.parse(localStorage.getItem("exams")) || [];
 
-        // Kiểm tra mã đề đã tồn tại chưa
         const isDuplicate = storedExams.some(exam => exam.examCode === form.examCode);
         if (isDuplicate) {
             alert('Mã đề thi đã tồn tại. Vui lòng nhập mã đề thi khác!');
             return;
         }
 
-        // Thêm đề thi mới vào danh sách
-        storedExams.push({
+        const newExam = {
             ...form,
-            isShared: Boolean(form.isShared), // đảm bảo là boolean
+            isShared: Boolean(form.isShared),
             questions: []
-        });
-        // thêm mảng questions rỗng nếu cần
+        };
 
-        // Lưu lại danh sách mới vào localStorage
+        storedExams.push(newExam);
         localStorage.setItem("exams", JSON.stringify(storedExams));
 
-        alert('Lưu đề thi thành công!');
-        onNext(form); // Chuyển sang bước tiếp theo (ví dụ: thêm câu hỏi)
-    };
+        // Nếu đề thi được chia sẻ, lưu vào sharedExams để admin xét duyệt
+        if (form.isShared) {
+            const sharedExams = JSON.parse(localStorage.getItem("sharedExams")) || [];
+            sharedExams.push({ ...form, status: 'pending' }); // Admin sẽ duyệt sau
+            localStorage.setItem("sharedExams", JSON.stringify(sharedExams));
+        }
 
+        alert('Lưu đề thi thành công!');
+        onNext(form);
+    };
 
     return (
         <div className="form-container">

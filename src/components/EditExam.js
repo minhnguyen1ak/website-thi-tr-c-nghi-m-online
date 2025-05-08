@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../css/form.css';
 
-const EditExam = ({ examData, onSave, onBack }) => {
+const EditExam = ({ examData, onSave }) => {
+    const navigate = useNavigate();
     const [exam, setExam] = useState({
         examCode: '',
         examName: '',
@@ -20,9 +22,9 @@ const EditExam = ({ examData, onSave, onBack }) => {
                 examCode: examData.examCode || '',
                 examName: examData.examName || '',
                 grade: examData.grade || '',
-                duration: examData.duration || '',
-                questionCount: examData.questionCount || '',
-                totalScore: examData.totalScore || '',
+                duration: examData.examTime || examData.duration || '',
+                questionCount: examData.totalQuestions || examData.questionCount || '',
+                totalScore: examData.totalMarks || examData.totalScore || '',
                 scorePerQuestion: examData.scorePerQuestion || 0,
                 questions: examData.questions || [],
                 isShared: examData.isShared || false
@@ -58,8 +60,16 @@ const EditExam = ({ examData, onSave, onBack }) => {
             alert('⚠️ Chưa có đầy đủ dữ liệu đề thi để lưu!');
             return;
         }
-        const updatedExam = { ...exam };
+        const updatedExam = {
+            ...exam,
+            questionCount: exam.questions.length,
+            totalScore: exam.questions.length * parseInt(exam.scorePerQuestion || 0)
+        };
         onSave(updatedExam);
+    };
+
+    const handleBack = () => {
+        navigate(-1); // Quay lại trang trước đó trong lịch sử trình duyệt
     };
 
     return (
@@ -85,14 +95,20 @@ const EditExam = ({ examData, onSave, onBack }) => {
                 </div>
                 <div className="form-group">
                     <label>Số Lượng Câu Hỏi</label>
-                    <input type="number" name="questionCount" value={exam.questionCount} onChange={handleChange} />
+                    <input type="number" name="questionCount" value={exam.questionCount} readOnly />
                 </div>
                 <div className="form-group">
                     <label>Tổng Điểm Đề Thi</label>
-                    <input type="number" name="totalScore" value={exam.totalScore} onChange={handleChange} />
+                    <input type="number" name="totalScore" value={exam.totalScore} readOnly />
                 </div>
                 <div className="form-group">
-                    <input type="text" value={`Điểm mỗi câu: ${exam.scorePerQuestion}`} readOnly />
+                    <label>Điểm Mỗi Câu</label>
+                    <input
+                        type="number"
+                        name="scorePerQuestion"
+                        value={exam.scorePerQuestion}
+                        onChange={handleChange}
+                    />
                 </div>
 
                 {/* Các câu hỏi */}
@@ -114,7 +130,7 @@ const EditExam = ({ examData, onSave, onBack }) => {
                                     <label>Đáp án {option.toUpperCase()}</label>
                                     <input
                                         type="text"
-                                        value={question.options[option]}
+                                        value={question.options[option] || ''}
                                         onChange={(e) => handleOptionChange(index, option, e.target.value)}
                                     />
                                 </div>
@@ -122,7 +138,7 @@ const EditExam = ({ examData, onSave, onBack }) => {
                             <div className="form-group">
                                 <label>Đáp án đúng</label>
                                 <select
-                                    value={question.correctAnswer}
+                                    value={question.correctAnswer || ''}
                                     onChange={(e) => handleCorrectAnswerChange(index, e.target.value)}
                                 >
                                     <option value="">--Chọn--</option>
@@ -140,7 +156,7 @@ const EditExam = ({ examData, onSave, onBack }) => {
 
                 <div className="button-group">
                     <button type="button" onClick={handleSave} className="save-button">Lưu Đề Thi</button>
-                    <button type="button" onClick={onBack} className="back-button">Quay Lại</button>
+                    <button type="button" onClick={handleBack} className="back-button">Quay Lại</button>
                 </div>
             </form>
         </div>
