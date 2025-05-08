@@ -12,6 +12,12 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
+        'api/questions/batch', // Thêm dòng này
+        'api/register', // Loại trừ route /api/register 
+        'api/login', 
+        'api/exams', 
+        '/api/exams/*', 
+        'api/exam-rooms'
+        
     ];
 }

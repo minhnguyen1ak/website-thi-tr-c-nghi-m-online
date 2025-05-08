@@ -9,6 +9,7 @@ class Exam extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'exam_id'; // Chỉ định exam_id là khóa chính
     protected $fillable = [
         'exam_code',
         'exam_name',
@@ -20,7 +21,7 @@ class Exam extends Model
 
     public function examRooms()
     {
-        return $this->hasMany(ExamRoom::class);
+        return $this->hasMany(ExamRoom::class); 
     }
 
     public function questions()

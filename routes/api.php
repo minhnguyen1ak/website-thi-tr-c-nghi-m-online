@@ -20,21 +20,29 @@ use App\Http\Controllers\Api\ExamRoomController;
 use App\Http\Controllers\Api\ExamResultController;
 use App\Http\Controllers\Api\QuestionController;
 
+
+
 // Authentication
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+
+
 // Exams
 Route::post('/exams', [ExamController::class, 'store']);
 Route::get('/exams', [ExamController::class, 'index']);
+Route::delete('/exams/{exam_code}', [ExamController::class, 'destroy']);
 
 // Exam Rooms
 Route::post('/exam-rooms', [ExamRoomController::class, 'store']);
 Route::get('/exam-rooms', [ExamRoomController::class, 'index']);
+Route::delete('/exam-rooms/{room_code}', [ExamRoomController::class, 'destroy']);
 
 // Questions
 Route::post('/questions', [QuestionController::class, 'store']);
 Route::get('/questions', [QuestionController::class, 'index']);
+Route::post('/questions/batch', [QuestionController::class, 'storeBatch']);
+Route::post('/questions/batch', [QuestionController::class, 'storeMultiple']);
 
 // Exam Results
 Route::post('/exam-results', [ExamResultController::class, 'store']);

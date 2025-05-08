@@ -5,7 +5,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:3001','*'], // ⚡ cho đúng frontend của bạn
+    'allowed_origins' => ['http://localhost:3000,invalid url, do not cite,http://localhost:3001','*'], // ⚡ cho đúng frontend của bạn
     // hoặc ['*'] cho tất cả, nhưng nên ghi cụ thể cho an toàn.
 
     'allowed_origins_patterns' => [],
